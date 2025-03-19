@@ -277,6 +277,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_warning("-Watimport-in-framework-header")
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
+@import ObjectiveC;
+@import UIKit;
 #endif
 
 #endif
@@ -297,10 +299,47 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 
 #if defined(__OBJC__)
+typedef SWIFT_ENUM(NSInteger, NSTruvideoSdkImageFileDescriptor, open) {
+  NSTruvideoSdkImageFileDescriptorCache = 0,
+  NSTruvideoSdkImageFileDescriptorFiles = 1,
+  NSTruvideoSdkImageFileDescriptorCustom = 2,
+};
+
+@class NSURL;
+@class NSString;
+@class NSValue;
+@class UIImage;
+
+/// Preset for the image editor
+SWIFT_CLASS("_TtC16TruvideoSdkImage28TruvideoSdkImageEditorPreset")
+@interface TruvideoSdkImageEditorPreset : NSObject
++ (TruvideoSdkImageEditorPreset * _Nonnull)instantiateWith:(NSURL * _Nonnull)imageURL fileName:(NSString * _Nonnull)fileName outputDescriptor:(enum NSTruvideoSdkImageFileDescriptor)outputDescriptor newSize:(NSValue * _Nullable)newSize SWIFT_WARN_UNUSED_RESULT;
++ (TruvideoSdkImageEditorPreset * _Nonnull)instantiateWithImage:(UIImage * _Nonnull)image fileName:(NSString * _Nonnull)fileName outputDescriptor:(enum NSTruvideoSdkImageFileDescriptor)outputDescriptor newSize:(NSValue * _Nullable)newSize SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+/// Result for the crop action
+SWIFT_CLASS("_TtC16TruvideoSdkImage28TruvideoSdkImageEditorResult")
+@interface TruvideoSdkImageEditorResult : NSObject
+@property (nonatomic, readonly, strong) UIImage * _Nullable editedImage;
+@property (nonatomic, readonly, copy) NSURL * _Nullable editedImageURL;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
 
 
 
 
+
+
+@interface UIViewController (SWIFT_EXTENSION(TruvideoSdkImage))
+/// Present the image editor view over the full screen
+/// \param onComplete A callback with the edited result
+///
+- (void)presentTruvideoSdkImageEditorViewWithPreset:(TruvideoSdkImageEditorPreset * _Nonnull)preset onComplete:(void (^ _Nonnull)(TruvideoSdkImageEditorResult * _Nonnull))onComplete;
+@end
 
 #endif
 #if __has_attribute(external_source_symbol)
